@@ -22,7 +22,8 @@ export default class AddDepartmentModal extends Component {
 			.then(
 				(result) => alert(JSON.stringify(result.Value, null, "\t")),
 				(error) => alert(error)
-			);
+			)
+			.then(this.props.onHide);
 	};
 
 	render() {
@@ -37,28 +38,28 @@ export default class AddDepartmentModal extends Component {
 					<Modal.Header closeButton={true}>
 						<Modal.Title id="contained-modal-title-vcenter">Add Department</Modal.Title>
 					</Modal.Header>
-					<Modal.Body>
-						<Row>
-							<Col sm={6}>
-								<Form onSubmit={this.handleSubmit}>
+					<Form onSubmit={this.handleSubmit}>
+						<Modal.Body>
+							<Row>
+								<Col sm={6}>
 									<Form.Group controlId="DepartmentName">
 										<Form.Label>Department Name</Form.Label>
 										<Form.Control type="text" name="DepartmentName" required />
 									</Form.Group>
-									<Form.Group>
-										<Button variant="primary" type="submit">
-											Submit
-										</Button>
-									</Form.Group>
-								</Form>
-							</Col>
-						</Row>
-					</Modal.Body>
-					<Modal.Footer>
-						<Button variant="danger" onClick={this.props.onHide}>
-							Close
-						</Button>
-					</Modal.Footer>
+								</Col>
+							</Row>
+						</Modal.Body>
+						<Modal.Footer>
+							<Form.Group>
+								<Button variant="primary" type="submit">
+									Submit
+								</Button>
+							</Form.Group>
+							<Button variant="danger" onClick={this.props.onHide}>
+								Cancel
+							</Button>
+						</Modal.Footer>
+					</Form>
 				</Modal>
 			</div>
 		);
