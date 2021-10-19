@@ -1,33 +1,47 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
+import { Button, ButtonToolbar } from "react-bootstrap";
+
+import AddDepartmentModal from "../components/AddDepartmentModal";
 
 interface dep {
 	departmentID: number;
 	departmentName: string;
 }
-export default class Department extends Component<{}, { deps: dep[] }> {
+interface DepartmentState {
+	deps: dep[];
+	addModalShow: boolean;
+}
+export default class Department extends Component<{}, { deps: dep[], addModalShow: boolean }> {
+	handleSubmit: any;
+	state: DepartmentState;
 	constructor(props) {
 		super(props);
-		this.state = { deps: [] };
+		this.state = { deps: [], addModalShow: false };
 	}
 
-	componentDidMount() {
+	componentDidMount = () => {
 		this.refreshList();
-	}
+	};
 
-	componentDidUpdate() {}
+	componentDidUpdate = () => {};
 
-	refreshList() {
+	refreshList = () => {
 		fetch(process.env.REACT_APP_API + "department")
 			.then((response) => response.json())
 			.then((data) => {
 				this.setState({ deps: data.Value });
-				console.log(this.state.deps);
 			});
-	}
+	};
 
 	render() {
 		const { deps } = this.state;
+		const addModalClose = () => {
+			this.setState({
+				addModalShow: false,
+			});
+		};
+
 		return (
 			<div className="">
 				<Table className="mt-4" striped bordered hover size="small">
@@ -48,6 +62,23 @@ export default class Department extends Component<{}, { deps: dep[] }> {
 						))}
 					</tbody>
 				</Table>
+				<ButtonToolbar>
+					<Button
+						variant="primary"
+						onClick={() =>
+							this.setState({
+								addModalShow: true,
+							})
+						}
+					>
+						Add
+					</Button>
+
+					<AddDepartmentModal
+						show={this.state.addModalShow}
+						onHide={addModalClose}
+					></AddDepartmentModal>
+				</ButtonToolbar>
 			</div>
 		);
 	}
