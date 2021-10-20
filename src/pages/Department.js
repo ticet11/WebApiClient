@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { Table } from "react-bootstrap";
 import { Button, ButtonToolbar } from "react-bootstrap";
 
-import AddDepartmentModal from "../components/department/AddDepartmentModal";
-import DeleteDepartmentModal from "../components/department/DeleteDepartmentModal";
-import EditDepartmentModal from "../components/department/EditDepartmentModal";
+import AddDepartmentModal from "../components/departments/AddDepartmentModal";
+import DeleteDepartmentModal from "../components/departments/DeleteDepartmentModal";
+import EditDepartmentModal from "../components/departments/EditDepartmentModal";
 import { dep } from "../types/dep";
 
 interface DepartmentState {
