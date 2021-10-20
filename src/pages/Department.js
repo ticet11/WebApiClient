@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Table } from "react-bootstrap";
 import { Button, ButtonToolbar } from "react-bootstrap";
 
-import AddDepartmentModal from "../components/AddDepartmentModal";
+import AddDepartmentModal from "../components/department/AddDepartmentModal";
 
 interface dep {
 	departmentID: number;
