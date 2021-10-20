@@ -38,7 +38,9 @@ export default class DeleteDepartmentModal extends Component {
 					centered
 				>
 					<Modal.Header closeButton={true}>
-						<Modal.Title id="contained-modal-title-vcenter">Add Department</Modal.Title>
+						<Modal.Title id="contained-modal-title-vcenter">
+							Delete Department
+						</Modal.Title>
 					</Modal.Header>
 					<Form onSubmit={this.handleSubmit}>
 						<Modal.Body>

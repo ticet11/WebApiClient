@@ -88,7 +88,7 @@ export default class Department extends Component<
 								<td>{dep.departmentName}</td>
 								<td>
 									<Button
-										variant="primary"
+										variant="warning"
 										onClick={() => {
 											this.setState({
 												departmentToEdit: {
@@ -102,7 +102,7 @@ export default class Department extends Component<
 										Edit
 									</Button>{" "}
 									<Button
-										variant="warning"
+										variant="danger"
 										onClick={() => {
 											this.setState({
 												departmentToEdit: {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Modal, Button, Row, Col, Form } from "react-bootstrap";
+import { Modal, Button, Row, Form } from "react-bootstrap";
 
 interface AddDepartmentModalProps {
 	show: any;
@@ -41,12 +41,10 @@ export default class AddDepartmentModal extends Component {
 					<Form onSubmit={this.handleSubmit}>
 						<Modal.Body>
 							<Row>
-								<Col sm={6}>
-									<Form.Group controlId="DepartmentName">
-										<Form.Label>Department Name:</Form.Label>
-										<Form.Control type="text" name="DepartmentName" required />
-									</Form.Group>
-								</Col>
+								<Form.Group controlId="DepartmentName">
+									<Form.Label>Department Name:</Form.Label>
+									<Form.Control type="text" name="DepartmentName" required />
+								</Form.Group>
 							</Row>
 						</Modal.Body>
 						<Modal.Footer>
