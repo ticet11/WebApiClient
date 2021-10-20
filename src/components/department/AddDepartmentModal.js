@@ -43,7 +43,7 @@ export default class AddDepartmentModal extends Component {
 							<Row>
 								<Col sm={6}>
 									<Form.Group controlId="DepartmentName">
-										<Form.Label>Department Name</Form.Label>
+										<Form.Label>Department Name:</Form.Label>
 										<Form.Control type="text" name="DepartmentName" required />
 									</Form.Group>
 								</Col>

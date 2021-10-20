@@ -9,6 +9,7 @@ interface dep {
 	departmentName: string;
 }
 interface DepartmentState {
+	getString: string;
 	deps: dep[];
 	addModalShow: boolean;
 }
@@ -17,7 +18,11 @@ export default class Department extends Component<{}, { deps: dep[], addModalSho
 	state: DepartmentState;
 	constructor(props) {
 		super(props);
-		this.state = { deps: [], addModalShow: false };
+		this.state = {
+			getString: [process.env.REACT_APP_API, "department"].join(""),
+			deps: [],
+			addModalShow: false,
+		};
 	}
 
 	componentDidMount = () => {
@@ -27,7 +32,7 @@ export default class Department extends Component<{}, { deps: dep[], addModalSho
 	componentDidUpdate = () => {};
 
 	refreshList = () => {
-		fetch(process.env.REACT_APP_API + "department")
+		fetch(this.state.getString)
 			.then((response) => response.json())
 			.then((data) => {
 				this.setState({ deps: data.Value });
