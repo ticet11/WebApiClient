@@ -3,6 +3,7 @@ import { Table } from "react-bootstrap";
 import { Button, ButtonToolbar } from "react-bootstrap";
 
 import AddDepartmentModal from "../components/department/AddDepartmentModal";
+import DeleteDepartmentModal from "../components/department/DeleteDepartmentModal";
 import EditDepartmentModal from "../components/department/EditDepartmentModal";
 import { dep } from "../types/dep";
 
@@ -11,11 +12,18 @@ interface DepartmentState {
 	deps: dep[];
 	addModalShow: boolean;
 	editModalShow: boolean;
+	deleteModalShow: boolean;
 	departmentToEdit: dep;
 }
 export default class Department extends Component<
 	{},
-	{ deps: dep[], addModalShow: boolean, editModalShow: boolean, departmentToEdit: dep }
+	{
+		deps: dep[],
+		addModalShow: boolean,
+		editModalShow: boolean,
+		deleteModalShow: boolean,
+		departmentToEdit: dep,
+	}
 > {
 	handleSubmit: any;
 	state: DepartmentState;
@@ -26,6 +34,7 @@ export default class Department extends Component<
 			deps: [],
 			addModalShow: false,
 			editModalShow: false,
+			deleteModalShow: false,
 			departmentToEdit: { departmentID: 0, departmentName: "" },
 		};
 	}
@@ -54,6 +63,11 @@ export default class Department extends Component<
 		const editModalClose = () => {
 			this.setState({
 				editModalShow: false,
+			});
+		};
+		const deleteModalClose = () => {
+			this.setState({
+				deleteModalShow: false,
 			});
 		};
 
@@ -87,7 +101,20 @@ export default class Department extends Component<
 									>
 										Edit
 									</Button>{" "}
-									Delete
+									<Button
+										variant="warning"
+										onClick={() => {
+											this.setState({
+												departmentToEdit: {
+													departmentID: dep.departmentID,
+													departmentName: dep.departmentName,
+												},
+												deleteModalShow: true,
+											});
+										}}
+									>
+										Delete
+									</Button>
 								</td>
 							</tr>
 						))}
@@ -114,6 +141,11 @@ export default class Department extends Component<
 						onHide={editModalClose}
 						departmentToEdit={this.state.departmentToEdit}
 					></EditDepartmentModal>
+					<DeleteDepartmentModal
+						show={this.state.deleteModalShow}
+						onHide={deleteModalClose}
+						departmentToEdit={this.state.departmentToEdit}
+					></DeleteDepartmentModal>
 				</ButtonToolbar>
 			</div>
 		);
