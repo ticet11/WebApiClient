@@ -3,17 +3,20 @@ import { Table } from "react-bootstrap";
 import { Button, ButtonToolbar } from "react-bootstrap";
 
 import AddDepartmentModal from "../components/department/AddDepartmentModal";
+import EditDepartmentModal from "../components/department/EditDepartmentModal";
+import { dep } from "../types/dep";
 
-interface dep {
-	departmentID: number;
-	departmentName: string;
-}
 interface DepartmentState {
 	getString: string;
 	deps: dep[];
 	addModalShow: boolean;
+	editModalShow: boolean;
+	departmentToEdit: dep;
 }
-export default class Department extends Component<{}, { deps: dep[], addModalShow: boolean }> {
+export default class Department extends Component<
+	{},
+	{ deps: dep[], addModalShow: boolean, editModalShow: boolean, departmentToEdit: dep }
+> {
 	handleSubmit: any;
 	state: DepartmentState;
 	constructor(props) {
@@ -22,6 +25,8 @@ export default class Department extends Component<{}, { deps: dep[], addModalSho
 			getString: [process.env.REACT_APP_API, "department"].join(""),
 			deps: [],
 			addModalShow: false,
+			editModalShow: false,
+			departmentToEdit: { departmentID: 0, departmentName: "" },
 		};
 	}
 
@@ -46,6 +51,11 @@ export default class Department extends Component<{}, { deps: dep[], addModalSho
 				addModalShow: false,
 			});
 		};
+		const editModalClose = () => {
+			this.setState({
+				editModalShow: false,
+			});
+		};
 
 		return (
 			<div className="">
@@ -62,7 +72,23 @@ export default class Department extends Component<{}, { deps: dep[], addModalSho
 							<tr key={`${dep.departmentID}`}>
 								<td>{dep.departmentID}</td>
 								<td>{dep.departmentName}</td>
-								<td>Edit / Delete</td>
+								<td>
+									<Button
+										variant="primary"
+										onClick={() => {
+											this.setState({
+												departmentToEdit: {
+													departmentID: dep.departmentID,
+													departmentName: dep.departmentName,
+												},
+												editModalShow: true,
+											});
+										}}
+									>
+										Edit
+									</Button>{" "}
+									Delete
+								</td>
 							</tr>
 						))}
 					</tbody>
@@ -83,6 +109,11 @@ export default class Department extends Component<{}, { deps: dep[], addModalSho
 						show={this.state.addModalShow}
 						onHide={addModalClose}
 					></AddDepartmentModal>
+					<EditDepartmentModal
+						show={this.state.editModalShow}
+						onHide={editModalClose}
+						departmentToEdit={this.state.departmentToEdit}
+					></EditDepartmentModal>
 				</ButtonToolbar>
 			</div>
 		);
