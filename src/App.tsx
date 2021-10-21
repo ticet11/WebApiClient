@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Home from './pages/Home';
-import Department from './pages/Department';
+import Department from './pages/DepartmentPage';
 import Employee from './pages/Employee';
 import Navigation from './components/Navigation';
 
