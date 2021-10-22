@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import React, { useState } from 'react';
 import {
   Modal, Button, Row, Form,
@@ -13,7 +14,8 @@ export default (props: DeleteDepartmentModalProps): JSX.Element => {
   const [deleteString] = useState(`${process.env.REACT_APP_API}department`);
   const { show, onHide, departmentToEdit } = props;
 
-  const handleSubmit = (event): void => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleSubmit = (event: any): void => {
     event.preventDefault();
     fetch(deleteString, {
       method: 'DELETE',

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table, Button, ButtonToolbar } from 'react-bootstrap';
 
 import AddDepartmentModal from '../components/departments/AddDepartmentModal';
 import DeleteDepartmentModal from
   '../components/departments/DeleteDepartmentModal';
 import EditDepartmentModal from '../components/departments/EditDepartmentModal';
+import { Department } from '../types/Department';
 
 export default (): JSX.Element => {
   const [getString] = useState(`${process.env.REACT_APP_API}department`);
@@ -16,14 +17,6 @@ export default (): JSX.Element => {
     departmentID: 0,
     departmentName: '',
   });
-
-  const refreshList = (): void => {
-    fetch(getString)
-      .then((response) => response.json())
-      .then((data) => {
-        setDeps(data.Value);
-      });
-  };
 
   const addModalClose = (): void => {
     setAddModalShow(false);
@@ -37,7 +30,13 @@ export default (): JSX.Element => {
     setDeleteModalShow(false);
   };
 
-  refreshList();
+  useEffect(() => {
+    fetch(getString)
+      .then((response) => response.json())
+      .then((data) => {
+        setDeps(data.Value);
+      });
+  });
 
   return (
     <div className="">
@@ -50,7 +49,7 @@ export default (): JSX.Element => {
           </tr>
         </thead>
         <tbody>
-          {deps.map((department) => (
+          {deps.map((department: Department) => (
             <tr key={`${department.departmentID}`}>
               <td>{department.departmentID}</td>
               <td>{department.departmentName}</td>

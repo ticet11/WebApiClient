@@ -1,4 +1,6 @@
+/* eslint-disable no-alert */
 import React, { useState } from 'react';
+import { FieldValues, useForm } from 'react-hook-form';
 import {
   Modal, Button, Row, Form,
 } from 'react-bootstrap';
@@ -10,11 +12,16 @@ interface EditDepartmentModalProps {
   departmentToEdit: Department;
 }
 export default (props: EditDepartmentModalProps): JSX.Element => {
+  const {
+    register, handleSubmit, formState: { errors },
+  } = useForm<FieldValues>({
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
+  });
   const [putString] = useState(`${process.env.REACT_APP_API}department`);
   const { show, onHide, departmentToEdit } = props;
 
-  const handleSubmit = (event): void => {
-    event.preventDefault();
+  const onSubmit = handleSubmit((formData) => {
     fetch(putString, {
       method: 'PUT',
       headers: {
@@ -22,8 +29,8 @@ export default (props: EditDepartmentModalProps): JSX.Element => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        ID: event.target.DepartmentID.value,
-        DepartmentName: event.target.DepartmentName.value,
+        ID: departmentToEdit.departmentID,
+        DepartmentName: formData.departmentName,
       }),
     })
       .then((res) => res.json())
@@ -32,7 +39,7 @@ export default (props: EditDepartmentModalProps): JSX.Element => {
         (error) => alert(error),
       )
       .then(onHide);
-  };
+  });
 
   return (
     <div className="container">
@@ -48,29 +55,35 @@ export default (props: EditDepartmentModalProps): JSX.Element => {
             Edit Department
           </Modal.Title>
         </Modal.Header>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={onSubmit}>
           <Modal.Body>
             <Row>
-              <Form.Group controlId="DepartmentID">
+              <Form.Group controlId="departmentID">
                 <Form.Label>Department Name:</Form.Label>
                 <Form.Control
                   type="text"
-                  name="DepartmentID"
-                  required
+                  name="departmentID"
                   disabled
                   value={departmentToEdit.departmentID}
                 />
               </Form.Group>
             </Row>
             <Row>
-              <Form.Group controlId="DepartmentName">
+              <Form.Group controlId="departmentName">
                 <Form.Label>Department Name:</Form.Label>
                 <Form.Control
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...register('departmentName', { required: true })}
                   type="text"
-                  name="DepartmentName"
-                  required
+                  name="departmentName"
                   defaultValue={departmentToEdit.departmentName}
                 />
+                {errors.departmentName
+                && (
+                  <div className="error">
+                    Please provide a department name.
+                  </div>
+                )}
               </Form.Group>
             </Row>
           </Modal.Body>
