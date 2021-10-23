@@ -36,7 +36,7 @@ export default (): JSX.Element => {
       .then((data) => {
         setDeps(data.Value);
       });
-  });
+  }, [getString]);
 
   return (
     <div className="">

@@ -1,0 +1,164 @@
+/* eslint-disable no-alert */
+import React, { useState } from 'react';
+import { FieldValues, useForm } from 'react-hook-form';
+import {
+  Modal, Button, Row, Form,
+} from 'react-bootstrap';
+import { Employee } from '../../types/Employee';
+
+interface EditEmployeeModalProps {
+  show: boolean;
+  onHide: () => void;
+  employeeToEdit: Employee;
+}
+export default (props: EditEmployeeModalProps): JSX.Element => {
+  const {
+    register, handleSubmit, formState: { errors },
+  } = useForm<FieldValues>({
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
+  });
+  const [putString] = useState(`${process.env.REACT_APP_API}employee`);
+  const { show, onHide, employeeToEdit } = props;
+
+  const onSubmit = handleSubmit((formData) => {
+    fetch(putString, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ID: employeeToEdit.employeeID,
+        Name: formData.employeeName,
+        Department: formData.employeeDepartment,
+        JoinDate: new Date(formData.employeeJoinDate)
+          .toISOString()
+          .slice(0, 19)
+          .replace('T', ' '),
+        PhotoFile: formData.employeePhotoFile,
+      }),
+    })
+      .then((res) => res.json())
+      .then(
+        (result) => alert(JSON.stringify(result.Value, null, 4)),
+        (error) => alert(error),
+      )
+      .then(onHide);
+  });
+
+  return (
+    <div className="container">
+      <Modal
+        show={show}
+        onHide={onHide}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Edit Employee
+          </Modal.Title>
+        </Modal.Header>
+        <Form onSubmit={onSubmit}>
+          <Modal.Body>
+            <Row>
+              <Form.Group controlId="employeeID">
+                <Form.Label>ID:</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="employeeID"
+                  disabled
+                  value={employeeToEdit.employeeID}
+                />
+              </Form.Group>
+            </Row>
+            <Row>
+              <Form.Group controlId="employeeName">
+                <Form.Label>Name:</Form.Label>
+                <Form.Control
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...register('employeeName')}
+                  type="text"
+                  name="employeeName"
+                  required
+                  value={employeeToEdit.employeeName}
+                />
+                {
+                  errors.employeeName
+                  && <div className="error">Choose a name, please!</div>
+                }
+              </Form.Group>
+            </Row>
+            <Row>
+              <Form.Group controlId="employeeDepartment">
+                <Form.Label>Department:</Form.Label>
+                <Form.Control
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...register('employeeDepartment')}
+                  type="text"
+                  name="employeeDepartment"
+                  required
+                  value={employeeToEdit.employeeDepartment}
+                />
+                {
+                  errors.employeeDepartment
+                  && <div className="error">Choose a department, please!</div>
+                }
+              </Form.Group>
+            </Row>
+            <Row>
+              <Form.Group controlId="employeePhotoFile">
+                <Form.Label>Photo File:</Form.Label>
+                <Form.Control
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...register('employeePhotoFile')}
+                  type="text"
+                  name="employeePhotoFile"
+                  required
+                  value={employeeToEdit.employeePhotoFile}
+                />
+                {
+                  errors.employeePhotoFile
+                  && <div className="error">Choose a photo file, please!</div>
+                }
+              </Form.Group>
+            </Row>
+            <Row>
+              <Form.Group controlId="employeeJoinDate">
+                <Form.Label>Join Date:</Form.Label>
+                <Form.Control
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...register('employeeJoinDate')}
+                  type="date"
+                  name="employeeJoinDate"
+                  required
+                  value={
+                    new Date(employeeToEdit.employeeJoinDate)
+                      .toISOString()
+                      .substr(0, 10)
+                  }
+                />
+                {
+                  errors.employeePhotoFile
+                  && <div className="error">Choose a photo file, please!</div>
+                }
+              </Form.Group>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Form.Group>
+              <Button variant="primary" type="submit">
+                Submit
+              </Button>
+            </Form.Group>
+            <Button variant="danger" onClick={onHide}>
+              Cancel
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
+    </div>
+  );
+};

@@ -15,11 +15,11 @@ This is an application that allows a user to manage employees and departments wi
 <!-- TODO-Brian: Employee CRUD operations -->
 - [ ] Employees
   - [ ] Create
-    - [ ] Add Employees
+    - [X] Add Employees
     - [ ] Add Employee Photo
-  - [ ] Read
-  - [ ] Update
-  - [ ] Delete
+  - [X] Read
+  - [X] Update
+  - [X] Delete
 
 ### Cleanup TODO list
 <!-- TODO-Brian: Remove all Alerts -->
