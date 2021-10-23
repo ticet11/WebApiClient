@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, ButtonToolbar } from 'react-bootstrap';
+import {
+  Table, Button, ButtonToolbar, Image,
+} from 'react-bootstrap';
 
 import AddEmployeeModal from '../components/employees/AddEmployeeModal';
 import DeleteEmployeeModal from
@@ -33,6 +35,11 @@ export default (): JSX.Element => {
     setDeleteModalShow(false);
   };
 
+  const createImageTag = (fileName: string): JSX.Element => {
+    const imgPath = `${process.env.REACT_APP_API_PHOTO}${fileName}`;
+    return <Image src={imgPath} fluid />;
+  };
+
   useEffect(() => {
     fetch(getString)
       .then((response) => response.json())
@@ -57,7 +64,7 @@ export default (): JSX.Element => {
         <tbody>
           {deps.map((employee: Employee) => (
             <tr key={`${employee.employeeID}`}>
-              <td>{employee.employeePhotoFile}</td>
+              <td>{createImageTag(employee.employeePhotoFile)}</td>
               <td>{employee.employeeID}</td>
               <td>{employee.employeeDepartment}</td>
               <td>{employee.employeeName}</td>

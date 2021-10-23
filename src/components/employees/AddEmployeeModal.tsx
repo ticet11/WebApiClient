@@ -104,6 +104,7 @@ export default (props: AddEmployeeModalProps): JSX.Element => {
                   {...register('employeePhotoFile')}
                   type="text"
                   name="employeePhotoFile"
+                  defaultValue="default.png"
                   required
                 />
                 {
