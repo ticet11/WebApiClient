@@ -83,7 +83,7 @@ export default (props: EditEmployeeModalProps): JSX.Element => {
                   type="text"
                   name="employeeName"
                   required
-                  value={employeeToEdit.employeeName}
+                  defaultValue={employeeToEdit.employeeName}
                 />
                 {
                   errors.employeeName
@@ -100,7 +100,7 @@ export default (props: EditEmployeeModalProps): JSX.Element => {
                   type="text"
                   name="employeeDepartment"
                   required
-                  value={employeeToEdit.employeeDepartment}
+                  defaultValue={employeeToEdit.employeeDepartment}
                 />
                 {
                   errors.employeeDepartment
@@ -117,7 +117,7 @@ export default (props: EditEmployeeModalProps): JSX.Element => {
                   type="text"
                   name="employeePhotoFile"
                   required
-                  value={employeeToEdit.employeePhotoFile}
+                  defaultValue={employeeToEdit.employeePhotoFile}
                 />
                 {
                   errors.employeePhotoFile
@@ -134,7 +134,7 @@ export default (props: EditEmployeeModalProps): JSX.Element => {
                   type="date"
                   name="employeeJoinDate"
                   required
-                  value={
+                  defaultValue={
                     new Date(employeeToEdit.employeeJoinDate)
                       .toISOString()
                       .substr(0, 10)
