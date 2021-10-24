@@ -13,7 +13,8 @@ export default (props: AddEmployeeModalProps): JSX.Element => {
   const {
     register, handleSubmit, formState: { errors },
   } = useForm<FieldValues>();
-  const [addString] = useState(`${process.env.REACT_APP_API}employee`);
+  const [addEmpString] = useState(`${process.env.REACT_APP_API}employee`);
+  const [addPhotoString] = useState(`${addEmpString}/AddEmployeePhoto`);
   const [currentDate] = useState(new Date().toISOString().substr(0, 10));
   const { show, onHide } = props;
 
@@ -21,9 +22,12 @@ export default (props: AddEmployeeModalProps): JSX.Element => {
     if (
       formData.employeeName != null
       && formData.employeeDepartment != null
-      && formData.employeePhotoFile != null
     ) {
-      fetch(addString, {
+      const formattedDate = formData.employeeJoinDate.replace(/[^0-9]/g, '');
+      const formattedName = formData.employeeName.replace(/\s+/g, '');
+      const fileExt = formData.employeePhotoFile[0].name
+        .substr(formData.employeePhotoFile[0].name.lastIndexOf('.'));
+      fetch(addEmpString, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -36,7 +40,7 @@ export default (props: AddEmployeeModalProps): JSX.Element => {
             .toISOString()
             .slice(0, 19)
             .replace('T', ' '),
-          PhotoFile: formData.employeePhotoFile,
+          PhotoFile: `${formattedDate}_${formattedName}${fileExt}`,
         }),
       })
         .then((res) => res.json())
@@ -44,6 +48,20 @@ export default (props: AddEmployeeModalProps): JSX.Element => {
           (result) => alert(JSON.stringify(result.Value, null, 4)),
           (error) => alert(error),
         )
+        .then(() => {
+          const data = new FormData();
+          data.append(
+            formData.employeePhotoFile[0].name,
+            formData.employeePhotoFile[0],
+            `${formattedDate}_${formattedName}${fileExt}`,
+          );
+          fetch(addPhotoString, {
+            method: 'POST',
+            body: data,
+          })
+            .then((res) => res.json())
+            .then((result) => alert(JSON.stringify(result.Value, null, 4)));
+        })
         .then(onHide);
     }
   });
@@ -97,20 +115,15 @@ export default (props: AddEmployeeModalProps): JSX.Element => {
               </Form.Group>
             </Row>
             <Row>
-              <Form.Group controlId="employeePhotoFile">
-                <Form.Label>Photo File:</Form.Label>
+              <Form.Group controlId="employeePhotoFile" className="mb-3">
+                <Form.Label>Employee Photo:</Form.Label>
                 <Form.Control
                   // eslint-disable-next-line react/jsx-props-no-spreading
                   {...register('employeePhotoFile')}
-                  type="text"
+                  type="file"
                   name="employeePhotoFile"
-                  defaultValue="default.png"
-                  required
+                  accept="image/jpeg, image/png"
                 />
-                {
-                  errors.employeePhotoFile
-                  && <div className="error">Choose a photo file, please!</div>
-                }
               </Form.Group>
             </Row>
             <Row>
@@ -125,8 +138,8 @@ export default (props: AddEmployeeModalProps): JSX.Element => {
                   required
                 />
                 {
-                  errors.employeePhotoFile
-                  && <div className="error">Choose a photo file, please!</div>
+                  errors.employeeJoinDate
+                  && <div className="error">Choose a join date, please!</div>
                 }
               </Form.Group>
             </Row>

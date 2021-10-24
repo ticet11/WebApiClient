@@ -37,7 +37,7 @@ export default (): JSX.Element => {
 
   const createImageTag = (fileName: string): JSX.Element => {
     const imgPath = `${process.env.REACT_APP_API_PHOTO}${fileName}`;
-    return <Image src={imgPath} fluid />;
+    return <Image height="200px" src={imgPath} />;
   };
 
   useEffect(() => {
