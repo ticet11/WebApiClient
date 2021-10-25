@@ -16,6 +16,7 @@ export default (props: AddEmployeeModalProps): JSX.Element => {
   const [addEmpString] = useState(`${process.env.REACT_APP_API}employee`);
   const [addPhotoString] = useState(`${addEmpString}/AddEmployeePhoto`);
   const [currentDate] = useState(new Date().toISOString().substr(0, 10));
+  const [newFileName, setNewFileName] = useState('default.png');
   const { show, onHide } = props;
 
   const onSubmit = handleSubmit((formData) => {
@@ -23,10 +24,13 @@ export default (props: AddEmployeeModalProps): JSX.Element => {
       formData.employeeName != null
       && formData.employeeDepartment != null
     ) {
-      const formattedDate = formData.employeeJoinDate.replace(/[^0-9]/g, '');
-      const formattedName = formData.employeeName.replace(/\s+/g, '');
-      const fileExt = formData.employeePhotoFile[0].name
-        .substr(formData.employeePhotoFile[0].name.lastIndexOf('.'));
+      if (formData.employeePhotoFile.length > 0) {
+        const formattedDate = formData.employeeJoinDate.replace(/[^0-9]/g, '');
+        const formattedName = formData.employeeName.replace(/\s+/g, '');
+        const fileExt = formData.employeePhotoFile[0].name
+          .substr(formData.employeePhotoFile[0].name.lastIndexOf('.'));
+        setNewFileName(`${formattedDate}_${formattedName}${fileExt}`);
+      }
       fetch(addEmpString, {
         method: 'POST',
         headers: {
@@ -40,7 +44,7 @@ export default (props: AddEmployeeModalProps): JSX.Element => {
             .toISOString()
             .slice(0, 19)
             .replace('T', ' '),
-          PhotoFile: `${formattedDate}_${formattedName}${fileExt}`,
+          PhotoFile: newFileName,
         }),
       })
         .then((res) => res.json())
@@ -49,18 +53,20 @@ export default (props: AddEmployeeModalProps): JSX.Element => {
           (error) => alert(error),
         )
         .then(() => {
-          const data = new FormData();
-          data.append(
-            formData.employeePhotoFile[0].name,
-            formData.employeePhotoFile[0],
-            `${formattedDate}_${formattedName}${fileExt}`,
-          );
-          fetch(addPhotoString, {
-            method: 'POST',
-            body: data,
-          })
-            .then((res) => res.json())
-            .then((result) => alert(JSON.stringify(result.Value, null, 4)));
+          if (newFileName !== 'default.png') {
+            const data = new FormData();
+            data.append(
+              formData.employeePhotoFile[0].name,
+              formData.employeePhotoFile[0],
+              newFileName,
+            );
+            fetch(addPhotoString, {
+              method: 'POST',
+              body: data,
+            })
+              .then((res) => res.json())
+              .then((result) => alert(JSON.stringify(result.Value, null, 4)));
+          }
         })
         .then(onHide);
     }

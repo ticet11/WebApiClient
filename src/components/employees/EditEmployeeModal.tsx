@@ -19,9 +19,18 @@ export default (props: EditEmployeeModalProps): JSX.Element => {
     reValidateMode: 'onChange',
   });
   const [putString] = useState(`${process.env.REACT_APP_API}employee`);
+  const [addPhotoString] = useState(`${putString}/AddEmployeePhoto`);
   const { show, onHide, employeeToEdit } = props;
 
   const onSubmit = handleSubmit((formData) => {
+    let newFileName = employeeToEdit.employeePhotoFile;
+    if (formData.employeePhotoFile.length > 0) {
+      const formattedDate = formData.employeeJoinDate.replace(/[^0-9]/g, '');
+      const formattedName = formData.employeeName.replace(/\s+/g, '');
+      const fileExt = formData.employeePhotoFile[0].name
+        .substr(formData.employeePhotoFile[0].name.lastIndexOf('.'));
+      newFileName = `${formattedDate}_${formattedName}${fileExt}`;
+    }
     fetch(putString, {
       method: 'PUT',
       headers: {
@@ -36,7 +45,7 @@ export default (props: EditEmployeeModalProps): JSX.Element => {
           .toISOString()
           .slice(0, 19)
           .replace('T', ' '),
-        PhotoFile: formData.employeePhotoFile,
+        PhotoFile: newFileName,
       }),
     })
       .then((res) => res.json())
@@ -44,6 +53,23 @@ export default (props: EditEmployeeModalProps): JSX.Element => {
         (result) => alert(JSON.stringify(result.Value, null, 4)),
         (error) => alert(error),
       )
+      .then(() => {
+        if (newFileName !== 'default.png'
+          && formData.employeePhotoFile.length > 0) {
+          const data = new FormData();
+          data.append(
+            formData.employeePhotoFile[0].name,
+            formData.employeePhotoFile[0],
+            newFileName,
+          );
+          fetch(addPhotoString, {
+            method: 'POST',
+            body: data,
+          })
+            .then((res) => res.json())
+            .then((result) => alert(JSON.stringify(result.Value, null, 4)));
+        }
+      })
       .then(onHide);
   });
 
@@ -109,20 +135,15 @@ export default (props: EditEmployeeModalProps): JSX.Element => {
               </Form.Group>
             </Row>
             <Row>
-              <Form.Group controlId="employeePhotoFile">
-                <Form.Label>Photo File:</Form.Label>
+              <Form.Group controlId="employeePhotoFile" className="mb-3">
+                <Form.Label>Employee Photo:</Form.Label>
                 <Form.Control
                   // eslint-disable-next-line react/jsx-props-no-spreading
                   {...register('employeePhotoFile')}
-                  type="text"
+                  type="file"
                   name="employeePhotoFile"
-                  required
-                  defaultValue={employeeToEdit.employeePhotoFile}
+                  accept="image/jpeg, image/png"
                 />
-                {
-                  errors.employeePhotoFile
-                  && <div className="error">Choose a photo file, please!</div>
-                }
               </Form.Group>
             </Row>
             <Row>
