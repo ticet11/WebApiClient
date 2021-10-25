@@ -11,8 +11,12 @@ import EditEmployeeModal from '../components/employees/EditEmployeeModal';
 import { Employee } from '../types/Employee';
 
 export default (): JSX.Element => {
-  const [getString] = useState(`${process.env.REACT_APP_API}employee`);
-  const [deps, setDeps] = useState([]);
+  const [getEmployeesString] = useState(`${process.env.REACT_APP_API}employee`);
+  const [getDepartmentsString] = useState(
+    `${process.env.REACT_APP_API}department`,
+  );
+  const [employees, setEmployees] = useState([]);
+  const [departments, setDepartments] = useState([]);
   const [addModalShow, setAddModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const [editModalShow, setEditModalShow] = useState(false);
@@ -42,12 +46,18 @@ export default (): JSX.Element => {
   };
 
   useEffect(() => {
-    fetch(getString)
+    fetch(getEmployeesString)
       .then((response) => response.json())
       .then((data) => {
-        setDeps(data.Value);
+        setEmployees(data.Value);
       });
-  }, [getString]);
+
+    fetch(getDepartmentsString)
+      .then((response) => response.json())
+      .then((data) => {
+        setDepartments(data.Value);
+      });
+  }, [getEmployeesString, getDepartmentsString]);
 
   return (
     <div className="employee-page-container">
@@ -74,7 +84,7 @@ export default (): JSX.Element => {
           </tr>
         </thead>
         <tbody>
-          {deps.map((employee: Employee) => (
+          {employees.map((employee: Employee) => (
             <tr key={`${employee.employeeID}`}>
               <td>{createImageTag(employee.employeePhotoFile)}</td>
               <td>{employee.employeeID}</td>
@@ -124,7 +134,11 @@ export default (): JSX.Element => {
         </tbody>
       </Table>
 
-      <AddEmployeeModal show={addModalShow} onHide={addModalClose} />
+      <AddEmployeeModal
+        show={addModalShow}
+        onHide={addModalClose}
+        departments={departments}
+      />
       <EditEmployeeModal
         show={editModalShow}
         onHide={editModalClose}

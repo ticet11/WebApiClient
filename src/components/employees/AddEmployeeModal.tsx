@@ -4,10 +4,12 @@ import { FieldValues, useForm } from 'react-hook-form';
 import {
   Modal, Button, Row, Form,
 } from 'react-bootstrap';
+import { Department } from '../../types/Department';
 
 interface AddEmployeeModalProps {
   show: boolean;
   onHide: () => void;
+  departments: Department[];
 }
 export default (props: AddEmployeeModalProps): JSX.Element => {
   const {
@@ -17,7 +19,7 @@ export default (props: AddEmployeeModalProps): JSX.Element => {
   const [addPhotoString] = useState(`${addEmpString}/AddEmployeePhoto`);
   const [currentDate] = useState(new Date().toISOString().substr(0, 10));
   const [newFileName, setNewFileName] = useState('default.png');
-  const { show, onHide } = props;
+  const { show, onHide, departments } = props;
 
   const onSubmit = handleSubmit((formData) => {
     if (
@@ -110,10 +112,23 @@ export default (props: AddEmployeeModalProps): JSX.Element => {
                 <Form.Control
                   // eslint-disable-next-line react/jsx-props-no-spreading
                   {...register('employeeDepartment')}
-                  type="text"
+                  as="select"
                   name="employeeDepartment"
                   required
-                />
+                >
+                  <option>-- Select a Department --</option>
+                  {
+                  departments.map(
+                    (department) => (
+                      <option
+                        key={department.departmentID}
+                      >
+                        {department.departmentName}
+                      </option>
+                    ),
+                  )
+                    }
+                </Form.Control>
                 {
                   errors.employeeDepartment
                   && <div className="error">Choose a department, please!</div>
