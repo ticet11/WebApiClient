@@ -13,10 +13,10 @@ This is an application that allows a user to manage employees and departments wi
   - [X] Delete
 
 <!-- TODO-Brian: Employee CRUD operations -->
-- [ ] Employees
-  - [ ] Create
+- [X] Employees
+  - [X] Create
     - [X] Add Employees
-    - [ ] Add Employee Photo
+    - [X] Add Employee Photo
   - [X] Read
   - [X] Update
   - [X] Delete

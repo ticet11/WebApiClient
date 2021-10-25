@@ -26,6 +26,7 @@ export default (props: DeleteEmployeeModalProps): JSX.Element => {
       body: JSON.stringify({
         ID: event.target.EmployeeID.value,
         Name: event.target.EmployeeName.value,
+        PhotoFile: employeeToEdit.employeePhotoFile,
       }),
     })
       .then((res) => res.json())
