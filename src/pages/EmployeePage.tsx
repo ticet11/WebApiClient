@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   Table, Button, ButtonToolbar, Image,
 } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import AddEmployeeModal from '../components/employees/AddEmployeeModal';
 import DeleteEmployeeModal from
@@ -49,7 +50,18 @@ export default (): JSX.Element => {
   }, [getString]);
 
   return (
-    <div className="">
+    <div className="employee-page-container">
+      <ButtonToolbar>
+        <Button
+          variant="primary"
+          title="Add Employee"
+          onClick={() => {
+            setAddModalShow(true);
+          }}
+        >
+          <FontAwesomeIcon icon="user-plus" />
+        </Button>
+      </ButtonToolbar>
       <Table className="mt-4" striped bordered hover size="small">
         <thead>
           <tr>
@@ -76,6 +88,7 @@ export default (): JSX.Element => {
               <td>
                 <Button
                   variant="warning"
+                  title="Edit Employee"
                   onClick={() => {
                     setEmployeeToEdit({
                       employeeID: employee.employeeID,
@@ -87,10 +100,11 @@ export default (): JSX.Element => {
                     setEditModalShow(true);
                   }}
                 >
-                  Edit
+                  <FontAwesomeIcon icon="user-pen" />
                 </Button>
                 <Button
                   variant="danger"
+                  title="Delete Employee"
                   onClick={() => {
                     setEmployeeToEdit({
                       employeeID: employee.employeeID,
@@ -102,35 +116,25 @@ export default (): JSX.Element => {
                     setDeleteModalShow(true);
                   }}
                 >
-                  Delete
+                  <FontAwesomeIcon icon="user-xmark" />
                 </Button>
               </td>
             </tr>
           ))}
         </tbody>
       </Table>
-      <ButtonToolbar>
-        <Button
-          variant="primary"
-          onClick={() => {
-            setAddModalShow(true);
-          }}
-        >
-          Add
-        </Button>
 
-        <AddEmployeeModal show={addModalShow} onHide={addModalClose} />
-        <EditEmployeeModal
-          show={editModalShow}
-          onHide={editModalClose}
-          employeeToEdit={employeeToEdit}
-        />
-        <DeleteEmployeeModal
-          show={deleteModalShow}
-          onHide={deleteModalClose}
-          employeeToEdit={employeeToEdit}
-        />
-      </ButtonToolbar>
+      <AddEmployeeModal show={addModalShow} onHide={addModalClose} />
+      <EditEmployeeModal
+        show={editModalShow}
+        onHide={editModalClose}
+        employeeToEdit={employeeToEdit}
+      />
+      <DeleteEmployeeModal
+        show={deleteModalShow}
+        onHide={deleteModalClose}
+        employeeToEdit={employeeToEdit}
+      />
     </div>
   );
 };
