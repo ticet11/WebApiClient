@@ -4,12 +4,16 @@ import { FieldValues, useForm } from 'react-hook-form';
 import {
   Modal, Button, Row, Form,
 } from 'react-bootstrap';
+
 import { Employee } from '../../types/Employee';
+import { Department } from '../../types/Department';
+import DepartmentSelect from '../DepartmentSelect';
 
 interface EditEmployeeModalProps {
   show: boolean;
   onHide: () => void;
   employeeToEdit: Employee;
+  departments: Department[];
 }
 export default (props: EditEmployeeModalProps): JSX.Element => {
   const {
@@ -20,7 +24,9 @@ export default (props: EditEmployeeModalProps): JSX.Element => {
   });
   const [putString] = useState(`${process.env.REACT_APP_API}employee`);
   const [addPhotoString] = useState(`${putString}/AddEmployeePhoto`);
-  const { show, onHide, employeeToEdit } = props;
+  const {
+    show, onHide, employeeToEdit, departments,
+  } = props;
 
   const onSubmit = handleSubmit((formData) => {
     let newFileName = employeeToEdit.employeePhotoFile;
@@ -120,12 +126,10 @@ export default (props: EditEmployeeModalProps): JSX.Element => {
             <Row>
               <Form.Group controlId="employeeDepartment">
                 <Form.Label>Department:</Form.Label>
-                <Form.Control
-                  // eslint-disable-next-line react/jsx-props-no-spreading
-                  {...register('employeeDepartment')}
-                  type="text"
+                <DepartmentSelect
                   name="employeeDepartment"
-                  required
+                  departments={departments}
+                  register={register}
                   defaultValue={employeeToEdit.employeeDepartment}
                 />
                 {

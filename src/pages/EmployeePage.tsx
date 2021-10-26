@@ -143,6 +143,7 @@ export default (): JSX.Element => {
         show={editModalShow}
         onHide={editModalClose}
         employeeToEdit={employeeToEdit}
+        departments={departments}
       />
       <DeleteEmployeeModal
         show={deleteModalShow}

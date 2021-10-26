@@ -4,7 +4,9 @@ import { FieldValues, useForm } from 'react-hook-form';
 import {
   Modal, Button, Row, Form,
 } from 'react-bootstrap';
+
 import { Department } from '../../types/Department';
+import DepartmentSelect from '../DepartmentSelect';
 
 interface AddEmployeeModalProps {
   show: boolean;
@@ -109,26 +111,11 @@ export default (props: AddEmployeeModalProps): JSX.Element => {
             <Row>
               <Form.Group controlId="employeeDepartment">
                 <Form.Label>Department:</Form.Label>
-                <Form.Control
-                  // eslint-disable-next-line react/jsx-props-no-spreading
-                  {...register('employeeDepartment')}
-                  as="select"
+                <DepartmentSelect
                   name="employeeDepartment"
-                  required
-                >
-                  <option>-- Select a Department --</option>
-                  {
-                  departments.map(
-                    (department) => (
-                      <option
-                        key={department.departmentID}
-                      >
-                        {department.departmentName}
-                      </option>
-                    ),
-                  )
-                    }
-                </Form.Control>
+                  departments={departments}
+                  register={register}
+                />
                 {
                   errors.employeeDepartment
                   && <div className="error">Choose a department, please!</div>
