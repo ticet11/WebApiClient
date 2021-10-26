@@ -42,7 +42,18 @@ export default (): JSX.Element => {
 
   const createImageTag = (fileName: string): JSX.Element => {
     const imgPath = `${process.env.REACT_APP_API_PHOTO}${fileName}`;
-    return <Image height="200px" src={imgPath} />;
+    const defImgPath = `${process.env.REACT_APP_API_PHOTO}default.png`;
+    return (
+      <Image
+        height="200px"
+        src={imgPath}
+        onError={(e) => {
+          const target = e.target as HTMLImageElement;
+          target.onerror = null;
+          target.src = defImgPath;
+        }}
+      />
+    );
   };
 
   useEffect(() => {
