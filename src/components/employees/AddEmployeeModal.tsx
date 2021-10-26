@@ -20,10 +20,10 @@ export default (props: AddEmployeeModalProps): JSX.Element => {
   const [addEmpString] = useState(`${process.env.REACT_APP_API}employee`);
   const [addPhotoString] = useState(`${addEmpString}/AddEmployeePhoto`);
   const [currentDate] = useState(new Date().toISOString().substr(0, 10));
-  const [newFileName, setNewFileName] = useState('default.png');
   const { show, onHide, departments } = props;
 
   const onSubmit = handleSubmit((formData) => {
+    let newFileName = 'default.png';
     if (
       formData.employeeName != null
       && formData.employeeDepartment != null
@@ -33,7 +33,7 @@ export default (props: AddEmployeeModalProps): JSX.Element => {
         const formattedName = formData.employeeName.replace(/\s+/g, '');
         const fileExt = formData.employeePhotoFile[0].name
           .substr(formData.employeePhotoFile[0].name.lastIndexOf('.'));
-        setNewFileName(`${formattedDate}_${formattedName}${fileExt}`);
+        newFileName = `${formattedDate}_${formattedName}${fileExt}`;
       }
       fetch(addEmpString, {
         method: 'POST',
